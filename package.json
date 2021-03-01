@@ -179,7 +179,7 @@
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.0",
     "winston-transport": "^4.4.0",
-    "winston-transport-sentry-node": "^0.7.0",
+    "winston-transport-sentry-node": "^1.0.2",
     "xlsx": "^0.16.9",
     "xml": "^1.0.1",
     "yargs": "^16.2.0"
