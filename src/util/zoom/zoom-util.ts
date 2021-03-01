@@ -1,5 +1,4 @@
 import { boundNumber } from "../numbers/numbers-util";
-import { round } from "lodash";
 
 export enum ZoomDirection {
   IN,
@@ -35,7 +34,7 @@ export const computeOffset = (
   const offset =
     mousePosition - (zoomRatio / newZoomRatio) * (mousePosition - zoomOffset);
 
-  return round(boundNumber(0, 1 - 1 / newZoomRatio, offset), 3);
+  return boundNumber(0, 1 - 1 / newZoomRatio, offset);
 };
 
 export const zoomReducer = (

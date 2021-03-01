@@ -4,11 +4,11 @@ import { useZoomContext } from "../workspace/zoom-provider";
 import { useTranslation } from "react-i18next";
 import { MenuItem } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
-import { percent } from "util/numbers/numbers-util";
 import { ZOOM_SPEED } from "../icicle/icicle-main";
 import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import ZoomPickerOptionItem from "./zoom-picker-option-item";
+import { round } from "lodash";
 
 const ZoomPicker: FC = () => {
   const { zoomIn, zoomOut, resetZoom, ratio } = useZoomContext();
@@ -49,7 +49,7 @@ const ZoomPicker: FC = () => {
     },
   ];
 
-  const title = `${t("workspace.currentZoom")} : ${percent(ratio, 1)}%`;
+  const title = `${t("workspace.currentZoom")} : x${round(ratio, 2)}`;
 
   return (
     <Box>
