@@ -43,3 +43,10 @@ export const ratio = (value: number, { min = 0, max }: RatioOptions) =>
 
 export const boundNumber = (low: number, high: number, value: number) =>
   Math.max(Math.min(value, high), low);
+
+export const normalize = (value: number): number => {
+  if (value === 0) {
+    return 0;
+  }
+  return value > 1 ? 1 : -1;
+};

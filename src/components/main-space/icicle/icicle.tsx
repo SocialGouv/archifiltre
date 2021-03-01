@@ -18,9 +18,17 @@ import {
 import { TagMap } from "reducers/tags/tags-types";
 import IcicleHightlightElement from "./icicle-highlight-element";
 import { empty } from "util/function/function-util";
+import { normalize } from "util/numbers/numbers-util";
+import { useThrottledCallback } from "../../../hooks/use-throttled-callback";
 
 export type DimsMap = {
   [id: string]: Dims;
+};
+
+export type WheelParams = {
+  mousePosition: number;
+  verticalWheelDirection: number;
+  horizontalWheelDirection: number;
 };
 
 export type IcicleProps = {
@@ -48,7 +56,7 @@ export type IcicleProps = {
   movedElementTime?: number;
   zoomOffset: number;
   zoomRatio: number;
-  onIcicleMouseWheel?: (event: any) => void;
+  onIcicleMouseWheel?: (wheelParams: WheelParams) => void;
 };
 
 const Icicle: FC<IcicleProps> = ({
@@ -114,12 +122,19 @@ const Icicle: FC<IcicleProps> = ({
     }
   });
 
-  const onMouseWheel = ({ clientX, deltaY }: any) => {
+  const onMouseWheel = ({ clientX, deltaY, deltaX }: any) => {
     const { x, width } = icicleRef?.current?.getBoundingClientRect() || clientX;
     const mousePosition = (clientX - x) / width;
-    const wheelDirection = deltaY > 1 ? 1 : -1;
-    onIcicleMouseWheel({ mousePosition, wheelDirection });
+    const verticalWheelDirection = normalize(deltaY);
+    const horizontalWheelDirection = normalize(deltaX);
+    onIcicleMouseWheel({
+      mousePosition,
+      verticalWheelDirection,
+      horizontalWheelDirection,
+    });
   };
+
+  const throttledOnMouseWheel = useThrottledCallback(onMouseWheel, 300);
 
   const xc = zoomOffset;
   const dxc = dx / zoomRatio;
@@ -152,7 +167,7 @@ const Icicle: FC<IcicleProps> = ({
   const tagIdToHighlight = "";
 
   return (
-    <g onWheel={onMouseWheel} ref={icicleRef}>
+    <g onWheel={throttledOnMouseWheel} ref={icicleRef}>
       <g style={style}>
         <IcicleRecursive
           x={sanitizedXPrime}

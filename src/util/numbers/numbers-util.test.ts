@@ -2,6 +2,7 @@ import {
   boundNumber,
   curriedFormatPercent,
   formatPercent,
+  normalize,
   percent,
   ratio,
 } from "./numbers-util";
@@ -74,6 +75,20 @@ describe("numbers-util", () => {
 
     it("should apply upper bound", () => {
       expect(boundNumber(0, 10, 15)).toBe(10);
+    });
+  });
+
+  describe("normalize", () => {
+    it("should return 0 if value is 0", () => {
+      expect(normalize(0)).toBe(0);
+    });
+
+    it("should return -1 if less than 0", () => {
+      expect(normalize(-5)).toBe(-1);
+    });
+
+    it("should return 1 when more than 0", () => {
+      expect(normalize(15)).toBe(1);
     });
   });
 });

@@ -1,22 +1,28 @@
 import React, { FC, useCallback, useContext, useState } from "react";
 import { empty } from "util/function/function-util";
-import { ZoomDirection, zoomReducer } from "util/zoom/zoom-util";
+import {
+  moveZoomWindow,
+  ZoomDirection,
+  zoomReducer,
+} from "util/zoom/zoom-util";
 
 type ZoomState = {
   zoomIn: (mousePosition: number | null, zoomSpeed: number) => void;
   zoomOut: (mousePosition: number | null, zoomSpeed: number) => void;
   setZoom: (offset: number, ratio: number) => void;
   setDefaultMousePosition: (mousePosition: number | null) => void;
+  moveWindow: (moveDirection: number) => void;
   resetZoom: () => void;
   ratio: number;
   offset: number;
 };
 
 const zoomState: ZoomState = {
-  zoomIn: (mousePosition, zoomSpeed) => {},
-  zoomOut: (mousePosition, zoomSpeed) => {},
-  setZoom: (offset, ratio) => {},
-  setDefaultMousePosition: (mousePosition) => {},
+  zoomIn: empty,
+  zoomOut: empty,
+  setZoom: empty,
+  setDefaultMousePosition: empty,
+  moveWindow: empty,
   resetZoom: empty,
   ratio: 1,
   offset: 0,
@@ -64,6 +70,13 @@ const ZoomProvider: FC = ({ children }) => {
     [setOffset, setRatio]
   );
 
+  const moveWindow = useCallback(
+    (moveDirection: number) => {
+      setOffset(moveZoomWindow({ ratio, offset }, moveDirection));
+    },
+    [offset, ratio, setOffset]
+  );
+
   const zoomIn = useCallback(
     (mousePosition, zoomSpeed) => {
       applyZoom(
@@ -97,6 +110,7 @@ const ZoomProvider: FC = ({ children }) => {
         zoomOut,
         resetZoom,
         setDefaultMousePosition,
+        moveWindow,
         setZoom,
         ratio,
         offset,

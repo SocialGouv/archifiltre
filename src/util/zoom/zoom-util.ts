@@ -48,3 +48,11 @@ export const zoomReducer = (
     offset: nextOffset,
   };
 };
+
+const MOVE_SPEED = 1 / 30;
+
+export const moveZoomWindow = (
+  { ratio, offset }: ZoomState,
+  moveDirection: number
+): number =>
+  boundNumber(0, 1 - 1 / ratio, offset + (MOVE_SPEED * moveDirection) / ratio);

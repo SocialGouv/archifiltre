@@ -157,6 +157,7 @@ const IcicleMain: FC<IcicleMainProps> = ({
     zoomOut,
     setZoom,
     setDefaultMousePosition,
+    moveWindow,
     offset: zoomOffset,
     ratio: zoomRatio,
   } = useZoomContext();
@@ -320,11 +321,15 @@ const IcicleMain: FC<IcicleMainProps> = ({
   );
 
   const onIcicleMouseWheel = useCallback(
-    ({ wheelDirection, mousePosition }) => {
-      const zoomMethod = wheelDirection > 0 ? zoomIn : zoomOut;
-      zoomMethod(mousePosition, ZOOM_SPEED);
+    ({ verticalWheelDirection, horizontalWheelDirection, mousePosition }) => {
+      const zoomMethod = verticalWheelDirection > 0 ? zoomIn : zoomOut;
+      if (verticalWheelDirection !== 0) {
+        zoomMethod(mousePosition, ZOOM_SPEED);
+      } else {
+        moveWindow(horizontalWheelDirection);
+      }
     },
-    [zoomIn, zoomOut]
+    [zoomIn, zoomOut, moveWindow]
   );
 
   return (
